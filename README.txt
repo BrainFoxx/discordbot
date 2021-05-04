@@ -1,1 +1,1 @@
-Bot maker - BrainFox#7302
+Bot author - BrainFox#7302
