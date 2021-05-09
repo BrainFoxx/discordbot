@@ -1,5 +1,5 @@
 ## Bot author - BrainFox#7302
-> Установка модулей:
+> Installing modules:
 > >pip install discord.py
 > > >pip install requests
 > > > >pip install asyncio
