@@ -1,5 +1,3 @@
 ## Bot author - BrainFox#7302
-> Installing modules:
-> >pip install discord.py
-> > >pip install requests
-> > > >pip install asyncio
+## Installing modules:
+> pip install -r requirements.txt
