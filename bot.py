@@ -5,38 +5,26 @@ import requests
 from time import sleep
 from random import choice
 
-bot_name = "BOT NAME"
-command_prefix = "!"
-server_name = "SERVER NAME"
 intents = discord.Intents().all()
 intents.members = True
+bot_name = "STKLF"
+command_prefix = "!"
+server_name = "STKLF"
 bot = commands.Bot(command_prefix, intents=intents)
 bot.remove_command("help")
-streaming = (
-    "https://www.youtube.com/watch?v=YVkUvmDQ3HY",
-    "https://www.youtube.com/watch?v=eJO5HU_7_1w",
-    "https://www.youtube.com/watch?v=r_0JjYUe5jo",
-)
-
+admin = 4895734985793847 #change this
 
 @bot.event
 async def on_ready():
-    activity = discord.Streaming(
-        platform="YouTube", name="Eminem", url=choice(streaming)
-    )
     print(f"Bot connected {bot.user}")
     await bot.change_presence(status=discord.Status.dnd, activity=activity)
 
 
 @bot.event
 async def on_message(message):
-    msg = message.content.lower() 
-    if ("http" or "https") in msg:
-        if "bet" in msg or "1x" in msg or "casino" in msg or "porn" in msg: # Antispam system
-            if message.channel.id != (
-                "783322703930851359" or "783327851390304286" or "783323335030210570" # You can write your channel id for ignore antispam system
-            ):
-                await message.delete()
+    msg = message.content.lower()
+    if "bet" in msg or "1x" in msg or "casino" in msg or "porn" in msg:
+        await message.delete()
     print(f"{message.author}: {message.content}")
     await bot.process_commands(message)
 
@@ -44,28 +32,28 @@ async def on_message(message):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send("This command does not exest!")
+        await ctx.send("This command does not exists!")
     else:
         pass
 
 
 @bot.event
 async def on_member_join(member):
-    role = discord.utils.get(member.guild.roles, id=783321672539308053)
+    role = discord.utils.get(member.guild.roles, id=12345667890123) # change this
     await member.add_roles(role)
 
 
 # HELP COMMANDS
 @bot.command(pass_context=True)
 async def help(ctx):
-    emb = discord.Embed(title=f"Commands for bot {bot_name}", color=0xFF9910)
+    emb = discord.Embed(title=f"Commands for {bot_name}", color=0xFF9910)
     emb.add_field(
         name=f"{command_prefix}help_fun",
-        value="Enter this command to see commands for fun",
+        value="Fun commands",
     )
     emb.add_field(
         name=f"{command_prefix}help_moder",
-        value="Enter this command to see commands for moderation ",
+        value="Moder.commands",
     )
     await ctx.send(embed=emb)
     await ctx.message.add_reaction("✅")
@@ -73,33 +61,29 @@ async def help(ctx):
 
 @bot.command(pass_context=True, aliases=["moder", "moderator"])
 async def help_moder(ctx):
-    emb = discord.Embed(title=f"Commands for bot {bot_name} - moderator", color=0xFF9910)
+    emb = discord.Embed(title=f"Commands for {bot_name} - moder", color=0xFF9910)
     emb.add_field(
-        name=f"{command_prefix}clear", value="Clear chat (max 100).{command_prefix}clear number "
+        name=f"{command_prefix}clear", value="clear chat"
     )
     emb.add_field(
         name=f"{command_prefix}kick",
-        value="Kick the server member.{command_prefix}kick @user reason ",
+        value="{command_prefix}kick @user reason",
     )
     emb.add_field(
         name=f"{command_prefix}ban",
-        value="Block a server member {command_prefix}Ban @user reason ",
+        value="{command_prefix}ban @user reason",
     )
     emb.add_field(
         name=f"{command_prefix}mute",
-        value=f"Issue a mute to the person (disable writing to the chat).{command_prefix}mute @user reason ",
+        value=f"{command_prefix}mute @user reason",
     )
     emb.add_field(
         name=f"{command_prefix}tempmute",
-        value=f'Issue a temporary mute to the person (prohibit chatting). {command_prefix}tempmute @user "time in minutes" and reason',
+        value=f'{command_prefix}tempmute @user time/s/m/y reason',
     )
     emb.add_field(
         name=f"{command_prefix}unmute",
-        value=f"Allow the person to write to the chat. {command_prefix}unmute @user ",
-    )
-    emb.add_field(
-        name=f"{command_prefix}warn",
-        value=f"Issue a warning to the principal. {command_prefix}warn @user reason",
+        value=f"{command_prefix}unmute @user",
     )
     await ctx.send(embed=emb)
     await ctx.message.add_reaction("✅")
@@ -107,17 +91,23 @@ async def help_moder(ctx):
 
 @bot.command(pass_context=True, aliases=["fun"])
 async def help_fun(ctx):
-    emb = discord.Embed(title=f"Commands for bot {bot_name} - for fun", color=0xFF9910)
+    emb = discord.Embed(title=f"Commands for {bot_name} fun", color=0xFF9910)
     emb.add_field(
-        name=f"{command_prefix}Cat_to_pm", value="Sending a picture of a cat to your pm chat"
+        name=f"{command_prefix}cat", 
+        value="Send photo with cat"
     )
     emb.add_field(
-        name=f"{command_prefix}Cat", value="Sending a picture of a cat to the general chat"
+        name=f"{command_prefix}dog", 
+        value="Send photo with dog"
     )
     emb.add_field(
-        name=f"{command_prefix}Dog", value="Sending a picture of a dog to a general chat"
+        name=f"{command_prefix}pat", 
+        value="Anime"
     )
-    emb.add_field(name=f"{command_prefix}Pat", value="Anime")
+    emb.add_field(
+        name=f"{command_prefix}neko",
+        value=f"Neko img"
+    )
     await ctx.send(embed=emb)
     await ctx.message.add_reaction("✅")
 
@@ -127,105 +117,95 @@ async def help_fun(ctx):
 # MODER COMMANDS
 
 
-@bot.command(aliases=["Mute"])
-@commands.has_any_role("650413799471316992, 667821257496199180" ) # role id
-async def mute(ctx, member: discord.Member, reason="Without reason"):
-    emb = discord.Embed(title="Mute", color=0xFF9910)
-    mute_role = discord.utils.get(ctx.message.guild.roles, name="Muted")
-    await emb.add_field(
-        name="Mute System",
-        value=f"{member.name}, has been muted on the server! Cause  `{reason}`",
-    )
+@bot.command(aliases="Mute")
+@commands.has_any_role(admin)
+async def mute(ctx, member: discord.Member, *, reason="No reason"):
+    mute_role = discord.utils.get(ctx.message.guild.roles, id=1234567889076) #change id to you role id for mute
+    await ctx.send(f"{member.name}, be muted! reason `{reason}`")
     await member.add_roles(mute_role)
-    await ctx.send(embed=emb)
-    await member.send(
-        f"{member.name} you have been muted to the server `{server_name}`! Cause  `{reason}`"
-    )
+    try:
+        await member.send(
+            f"{member.name} you will be muted `{server_name}`! Reason `{reason}`"
+        )
+    except:
+        print("Might not be receiving messages")
     await ctx.message.add_reaction("✅")
 
 
 @mute.error
 async def mute_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("[ERROR], you must enter the participant's name!")
+        await ctx.send("[ERROR], you need to write user name!")
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send("[ERROR], you do not have sufficient rights!")
+        await ctx.send("[ERROR, you are not right enough!")
 
 
-@bot.command(aliases=["Unmute"])
-@commands.has_any_role("650413799471316992, 667821257496199180") # role id
+@bot.command(aliases="Unmute")
+@commands.has_any_role(admin)
 async def unmute(ctx, member: discord.Member):
-    emb = discord.Embed(title="Unmute", color=0xFF9910)
-    mute_role = discord.utils.get(ctx.message.guild.roles, name="Muted")
-    emb.add_field(
-        name="Mute System", value=f"{member.mention}, can now write to chat! "
-    )
+    mute_role = discord.utils.get(ctx.message.guild.roles, id=790274663791853568)
+    await ctx.send(f"{member.mention}, now can write to chat!")
     await member.remove_roles(mute_role)
-    await ctx.send(embed=emb)
-    await member.send(f"{member.name}, you were unmuted on the server `{server_name}`")
+
     await ctx.message.add_reaction("✅")
 
 
 @unmute.error
 async def unmute_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("[ERROR], you must enter the participant's name!")
+        await ctx.send("[ERROR], you need to write user name!")
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send("[ERROR], you do not have sufficient rights!")
+        await ctx.send("[ERROR, you are not right enough!")
 
 
 @bot.command(aliases=["Tempmute"])
-@commands.has_any_role("650413799471316992, 667821257496199180") # role id 
-async def tempmute(ctx, member: discord.Member, time: int, reason=None):
-    role = member.guild.get_role("Muted")
-    await member.send(
-        f"`{member.name}`, you have been mapped to the server `{server_name}` for `{time}` minutes! Reason `{reason}`!"
-    )
+@commands.has_any_role(650413799471316992, 667821257496199180)
+async def tempmute(ctx, member: discord.Member, time, *, reason="Без причины"):
+    role = discord.utils.get(ctx.message.guild.roles, id=790274663791853568)
+    time_convert = {"s": 1, "m": 60, "h": 3600, "d": 86400}
+    tempmutee = int(time[:-1]) * time_convert[time[-1]]
     await member.add_roles(role)
     await member.move_to(None)
     await ctx.send(
-        f"{member.mention} got mut for `{time}` minutes for the reason:  `{reason}`"
+        f"{member.mention} got mute for a `{time}`. Reason: `{reason}`"
     )
+    await member.add_roles(role)
+    await member.move_to(None)
+    try:
+        await member.send(
+            f"`{member.name}`, you got mute on a `{server_name}` for a `{time}`! Reason`{reason}`!"
+        )
+    except:
+        pass
     await ctx.message.add_reaction("✅")
-    sleep(time * 60)
+    await asyncio.sleep(tempmutee)
     await member.remove_roles(role)
 
 
 @tempmute.error
 async def tempmute_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("[ERROR], you must indicate the name of the offender, the time and the reason!")
+        await ctx.send("[ERROR], you need to write name and reason!")
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send("[ERROR], you do not have sufficient rights!")
+        await ctx.send("[ERROR, you are not right enough!")
 
 
-@bot.command(pass_context=True, aliases=["Clear"])
-@commands.has_any_role("650413799471316992, 667821257496199180") # role id
+@bot.command(pass_context=True, aliases="Clear")
+@commands.has_any_role(admin)
 async def clear(ctx, amount: int):
-    await ctx.channel.purge(limit=amount)
-    await ctx.send(f"Messages `{amount}` have been cleared ")
-    sleep(3)
-    await ctx.channel.purge(limit=1)
+    await ctx.channel.purge(limit=amount+1)
+    await ctx.send(f"Was cleared `{amount}`")
 
-
-@clear.error
-async def clear_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(
-            "[ERROR], you must indicate the number of messages to be deleted! "
+@bot.command(pass_context=True)
+@commands.has_any_role(admin)
+async def kick(ctx, member: discord.Member, *, reason="No reason"):
+    await ctx.send(f"{member.mention} was kicked from server ! Reason `{reason}`")
+    try:
+        await member.send(
+            f"`{member.name}`, you have been kicked from the server `{server_name}`! Don't break the rule again `{reason}`"
         )
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send("[ERROR], you do not have sufficient rights! ")
-
-
-@bot.command(pass_context=True, aliases=["Kick"])
-@commands.has_any_role("650413799471316992, 667821257496199180" ) # role id
-async def kick(ctx, member: discord.Member, *, reason="Без причины"):
-    await member.send(
-        f"`{member.name}`, you have been kicked out of the server `{server_name}`! No more  "
-        f"don't break the rule anymore:  `{reason}`"
-    )
-    await ctx.send(f"{member.mention} was kicked from the server! Reason  `{reason}`")
+    except:
+        pass
     await member.kick(reason=reason)
     await ctx.message.add_reaction("✅")
 
@@ -233,29 +213,22 @@ async def kick(ctx, member: discord.Member, *, reason="Без причины"):
 @kick.error
 async def kick_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("[ERROR], you must provide the member name and reason! ")
+        await ctx.send("[ERROR], you must provide a member name and a reason!")
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send("[ERROR], you do not have sufficient rights! ")
+        await ctx.send("[ERROR], you do not have enough rights!")
 
 
-@bot.command()
-@commands.has_any_role("650413799471316992, 667821257496199180" ) # role id
-async def warn(ctx, member: discord.Member, reason=None):
-    if reason is None:
-        await ctx.send(f"[ERROR], you must indicate the reason ")
-
-    else:
-        await ctx.send(f"{member.name}, got a warning for a reason  `{reason}`")
-
-
-@bot.command(pass_context=True, aliases=["Ban"])
-@commands.has_any_role("650413799471316992, 667821257496199180" ) # role id
+@bot.command(pass_context=True)
+@commands.has_any_role(admin)
 async def ban(ctx, member: discord.Member, *, reason=None):
-    await member.send(
-        f"`{member.name}`, you have been blocked on the server `{server_name}`! Reason: `{reason}`"
-    )
-    await ctx.send(f"{member.mention} was blocked on the server! Reason:  `{reason}`")
+    await ctx.send(f"{member.mention} blocked on the server! Reason `{reason}`")
+    try:
+        await member.send(
+            f"`{member.name}`, you have been banned from the server `{server_name}`! Reason `{reason}`"
+        )
+    except:
+        pass
     await member.ban(reason=reason)
     await ctx.message.add_reaction("✅")
 
@@ -263,50 +236,49 @@ async def ban(ctx, member: discord.Member, *, reason=None):
 @ban.error
 async def ban_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("[ERROR], you must indicate the reason for the ban ")
+        await ctx.send("[ERROR], you must provide a member name and a reason!")
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send("[ERROR], you don't have enough rights! ")
+        await ctx.send("[ОШИБКА], you don't have enough rights!")
 
 
 # FINISHED MODER COMMANDS
 
 # FUN COMMANDS
+@bot.command()
+async def neko(ctx):
+    if ctx.channel.is_nsfw():
+        choises = ['neko', 'fox_girl']
+        odpoved = choice(choises)
+        response = requests.get(f"https://nekos.life/api/v2/img/{odpoved}")
+        json_data = json.loads(response.text)
+        embed = discord.Embed(color=0xFF9910, title="Neko")
+        embed.set_image(url=json_data["url"])
+        await ctx.send(embed=embed)
 
-@bot.command(aliases=["cat"])
-async def Cat(ctx):                                             # cat
+@bot.command()
+async def cat(ctx):
     response = requests.get("https://some-random-api.ml/img/cat")
     json_data = json.loads(response.text)
 
-    embed = discord.Embed(color=0xFF9910, title="Котейка")
+    embed = discord.Embed(color=0xFF9910, title="CAT!")
     embed.set_image(url=json_data["link"])
     await ctx.send(embed=embed)
     await ctx.message.add_reaction("✅")
 
 
-@bot.command(aliases=["dog"])
-async def Dog(ctx):                                             # dog
+@bot.command()
+async def dog(ctx):
     response = requests.get("https://some-random-api.ml/img/dog")
     json_data = json.loads(response.text)
 
-    embed = discord.Embed(color=0xFF9910, title="Пёсик")
+    embed = discord.Embed(color=0xFF9910, title="DOG!")
     embed.set_image(url=json_data["link"])
     await ctx.send(embed=embed)
     await ctx.message.add_reaction("✅")
 
-
-@bot.command(aliases=["cat_to_pm", "cat_pm"])
-async def Cat_to_pm(ctx):                                       # cat to pm
-    response = requests.get("https://some-random-api.ml/img/cat")
-    json_data = json.loads(response.text)
-
-    embed = discord.Embed(color=0xFF9910, title="Котейка")
-    embed.set_image(url=json_data["link"])
-    await ctx.author.send(embed=embed)
-
-
 @bot.command(aliases=["pat"])
-async def Pat(ctx):                                              # Anime
+async def pat(ctx):
     response = requests.get("https://some-random-api.ml/animu/pat")
     json_data = json.loads(response.text)
 
@@ -317,11 +289,14 @@ async def Pat(ctx):                                              # Anime
 
 
 @bot.command()
-async def sms(ctx, member: discord.Member, reason=None): # Anonim sms
-    await member.send(reason)
-    await ctx.channel.purge(limit=1)
+async def anon(ctx, member: discord.Member, reason=None):
+    if "NAME" not in member.name:
+        await member.send(reason)
+        await ctx.channel.purge(limit=1)
+    else: 
+        pass
 
 
 # FINISHED FUN COMMANDS
 
-bot.run("YOUR TOKEN")
+bot.run(open("token.txt", 'r').readlines())
